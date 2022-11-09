@@ -51,7 +51,7 @@ public class SuffixTreeAppl {
 		while(true){
 			// locate child with left label x[i]
 			position = t.searchList(position.getChild(), x[i]);
-			// if matches are not found then return failure
+			// if no child exists then return failure
 			if (position==null){
 				t1.setPos(-1);
 				return t1;
@@ -85,7 +85,7 @@ public class SuffixTreeAppl {
 						++i;
 						}
 				    }
-					else{
+					else{// k has went past the end of the string thus key not found
 						// unsuccessful termination
 						t1.setPos(-1);
 						return t1;	
@@ -121,11 +121,12 @@ public class SuffixTreeAppl {
 		// Failure termination in case of no occurences detected
 		if(t1.getPos() < 0)
 		return t2;
-
+		// add child of intial root to queue to begin transversal
 		line.add(t1.getMatchNode().getChild());
-
+		// loop until queue is emptied
 		while(!(line.isEmpty()))
 		{
+			// store current node at front of queue and assosicated descendants and siblings
 			position = line.poll();
 			descendant = position.getChild();
 			sibling = position.getSibling();
@@ -133,11 +134,11 @@ public class SuffixTreeAppl {
 			{
 				// append suffix to linked list if is has no children ie. leaf
 				t2.addEntry(position.getSuffix());
-			}else
+			}else // if children present append to the queue
 			{
 				line.add(descendant);
 			}
-			if(sibling != null)
+			if(sibling != null) // if node has siblings append them to the queue
 			{
 				line.add(sibling);
 			}
@@ -169,11 +170,12 @@ public class SuffixTreeAppl {
 		// Transverse tree just as in allOccurences method
 		while(!(line.isEmpty()))
 		{
+			// store current node at front of queue and assosicated descendants and siblings
 			position = line.poll();
 			descendant = position.getChild();
 			sibling = position.getSibling();
 			
-			if(sibling != null)
+			if(sibling != null) // store value for current sibling present or not
 			{
 				siblingDetected = true; 
 			}else
@@ -186,15 +188,16 @@ public class SuffixTreeAppl {
 				//Validate whether size of substring is larger than max length
 				if ((position.getLeftLabel()-position.getSuffix()) > t3.getLen() && siblingDetected)
 				{
+					// update current result accordingly
 					t3.setLen(position.getLeftLabel()-position.getSuffix());
 					t3.setPos1(position.getSuffix());
 					t3.setPos2(sibling.getSuffix());
 				}
-			}else
+			}else // if children present append to the queue
 			{
 				line.add(descendant);
 			}
-			if(siblingDetected)
+			if(siblingDetected) // if node has siblings append them to the queue
 			{
 				line.add(sibling);
 			}
@@ -222,7 +225,7 @@ public class SuffixTreeAppl {
 		recursiveLcs(t4, t.getRoot(), s1Length, 0);
 		return t4;
 	}
-
+	// Helper method for transverseForLcs
 	public void recursiveLcs(Task4Info t4, SuffixTreeNode position, int s1Length, int posLen)
 	{
 		SuffixTreeNode descendant = position.getChild();
@@ -243,9 +246,12 @@ public class SuffixTreeAppl {
 		// crawl children of current note and adjust the posLen length accordingly
 		while(descendant != null)
 		{
+			// update posLen relative to current position
 			posLen = posLen + (descendant.getRightLabel() - descendant.getLeftLabel() + 1);
+			// recursively call to check specific location in tree
 			recursiveLcs(t4, descendant, s1Length, posLen);
 			posLen = posLen - (descendant.getRightLabel() - descendant.getLeftLabel() + 1);
+			// update current descendant node and loop
 			descendant = descendant.getSibling();
 		}
 	}

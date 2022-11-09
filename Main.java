@@ -19,8 +19,6 @@ public class Main {
                 errorMessage += "  java Main LRS <filename> for Task 3\n" ;
                 errorMessage += "  java Main LCS <filename1> <filename2> for Task 4";
 
-		String request = args[0];
-
 		if (args.length < 2)
 			System.out.println(errorMessage);
 		else {
@@ -52,7 +50,7 @@ public class Main {
 					System.out.printf("Search string \"%s\" not found in %s\n", query, filename);
 				}
 				else{
-					System.out.printf("Search string \"%s\" occurs at position %d of %s", query, t1.getPos(), filename);
+					System.out.printf("Search string \"%s\" occurs at position %d of %s\n", query, t1.getPos(), filename);
 				}
 				break;
 			case "SearchAll": {
@@ -143,7 +141,7 @@ public class Main {
 				//Find longest common substring
 				Task4Info t4 = suffixTreeAppl.traverseForLcs(text.length);
 				if(t4.getLen() == 0){
-					System.out.printf("No common substrings detected in the files %s and %s.", filename, filename2);
+					System.out.printf("No common substrings detected in the files %s and %s.\n", filename, filename2);
 				}
 				else
 				{

@@ -55,38 +55,42 @@ public class SuffixTree {
 		//add termination character to input string
 		s[sInput1.length] = (byte) '#';
 		System.arraycopy(sInput2, 0, s, sInput1.length+1, sInput2.length);
-		//add termination character to input string
+		//add termination character to end of input string
 		s[sInput1.length+sInput2.length+1] = (byte) '$';
 		buildSuffixTree();
-		suffixSorter( root, sInput1.length );
+		suffixSorter(root, sInput1.length);
 	}
 	// Match each node with the corresponding string for ease of later processing
 	private void suffixSorter(SuffixTreeNode position, int counter ){
 		int s = position.getSuffix();
 		SuffixTreeNode descendant = position.getChild();
 		SuffixTreeNode pos;
+		// if no child at position then only one node
 		if(descendant == null){
 			if( s >= 1 && s <= counter ){
 				position.setLeafNodeString1(true);
 				position.setLeafNodeNumString1(position.getSuffix());
 			}
 			
-			else if( s <= stringLen + 1 && s >= counter + 2){
+			else if(s >= counter + 2 && s <= stringLen + 1){
 				position.setLeafNodeString2(true);
 				position.setLeafNodeNumString2(position.getSuffix());
 			}
 			return;
 		}
 		pos = descendant;
+		// if children do exist then loop until no children left ie. bottom of tree
 		while(pos != null){
 			suffixSorter( pos, counter );
 
 			if( !(position.getLeafNodeString1()) && pos.getLeafNodeString1()){
+				// intialise new node at position
 				position.setLeafNodeString1(true);
 				position.setLeafNodeNumString1(pos.getLeafNodeNumString1());
 			}
 			
 			if( !(position.getLeafNodeString2()) && pos.getLeafNodeString2()){
+				// intialise new node at position
 				position.setLeafNodeString2(true);
 				position.setLeafNodeNumString2(pos.getLeafNodeNumString2());
 			}
